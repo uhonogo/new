@@ -1,0 +1,2 @@
+# Игнорировать файл foo.txt.
+/gulp/node_modules/*
