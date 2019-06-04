@@ -1,0 +1,31 @@
+.top_slider
+	.slick-slide
+
+		&>div
+			height: 400px
+		.slide
+			height: 400px
+			&_image
+				height: 100%
+			&_description
+				background-color: rgba(#fff, 0) !important
+				background-image: linear-gradient(115deg, #fff 0%, #dfe9f3 75%, rgba(#fff, 0) 75%, rgba(#fff, 0) 100%)
+				height: 100%
+				left: -5%
+				transform: translateY(-50%)
+				h3
+					font-size: 2.2rem
+					font-weight: 500
+					margin: 90px 0 20px
+					max-width: 450px
+					padding-right: 20px
+					width: 100%
+					a
+						color: #2c2c2c
+				.author
+					font-size: 1.2rem
+					font-weight: 800
+					text-transform: capitalize
+		&.slick-active
+			.slide_description
+				left: 0%

@@ -1,0 +1,74 @@
+
+.card
+	cursor: default
+	&-image
+		height: 204px
+		overflow: hidden
+		img
+			height: 100%
+			width: auto
+		&__slider
+			img
+				height: auto
+				width: 100%
+	&-title
+		font-size: 1.3rem
+		font-weight: 600
+		position: relative
+	&-text
+		height: 125px
+		overflow: hidden
+		position: relative
+	&-body
+		padding: 15px
+		position: relative
+	&-data
+		font-size: .9rem
+		.author
+			font-size: 1.1rem
+			font-weight: 700
+			text-transform: capitalize
+	.btn
+		display: block
+		margin-top: 20px
+		padding: 5px 15px
+		font-size: 1rem
+	&_slider
+		min-height: 330px
+		&:hover
+			.card-image
+				opacity: .7
+		.card-image
+			transition: .2s linear
+			img 
+				height: auto
+				width: 100%
+
+	&_archive
+		max-width: 100%
+		padding: 0
+		width: 100%
+		&:hover
+			.card-image
+				opacity: .7
+		.card
+			&-image
+				height: 340px
+				transition: .2s linear
+				padding-right: 15px
+				width: 100%
+				img
+					height: 100%
+					max-width: none
+					width: auto
+			&-title
+				a
+					font-size: 1.7rem
+					font-weight: 700
+			&-text
+				height: auto
+				margin-top: 20px
+				p
+					margin: 0
+		.btn
+			width: 100px

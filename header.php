@@ -21,29 +21,26 @@
 </head>
 
 <body <?php body_class(); ?>>
-	<header id="masthead" class="fixed-top bg-white shadow">
+	<header id="masthead" class="fixed-top bg-white header shadow">
 		<div class="container">
-			<div class="container-fluid">
-				<div class="row">
+			<div class="row">
+				<div class="logo">
 					<?php the_custom_logo(); ?>
-
-					<div id="site-navigation" class="main-navigation">
-						<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'bootatrap_template' ); ?></button>
-						<?php
-						wp_nav_menu( array(
-							'theme_location' => 'menu-1',
-							'container'       => 'nav', 
-							'container_class' => 'navigation', 
-							'menu_id'        => 'primary-menu',
-							'menu_class'     => 'nav'
-						) );
-						?>
-					</div><!-- #site-navigation -->
 				</div>
+				
+				<?php
+            		get_template_part('template-parts/components/menu');
+            	?>
 			</div>
 		</div>
 
 	</header><!-- #masthead -->
 
-	<main id="content" class="site-content">
-		<div class="container1">
+	<div class="bg-light">
+		<div class="container">
+			<?php get_breadcrumb(); ?>
+		</div>
+	</div>
+
+	<div id="content" class="site-content container1">
+

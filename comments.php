@@ -1,78 +1,67 @@
 <?php
-/**
- * The template for displaying comments
- *
- * This is the template that displays the area of the page that contains both the current comments
- * and the comment form.
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package bootatrap_template
- */
 
-/*
- * If the current post is protected by a password and
- * the visitor has not yet entered the password we will
- * return early without loading the comments.
- */
-if ( post_password_required() ) {
-	return;
+if ( post_password_required() ){
+    return;
 }
+$comments_facebook = get_theme_mod('custom_comments_single_facebook',false);
 ?>
+<div id="comments" class="box box-comment">
+    <?php if($comments_facebook){?>
+        <div id="fb-comments" class="fb-comments" order_by="reverse_time" data-width="100%" data-href="<?php echo esc_url(get_permalink()) ?>" data-num-posts="10"></div>
+    <?php }
+    else{ ?>
+        <div class="comments-list">
 
-<div id="comments" class="comments-area">
+            <?php comments_number( '', '<h5 class="heading"><span>'.esc_html__('1 Comment','bootstrap_template').'</span></h5>', '<h5 class="heading"><span>'.esc_html__('% Comments','bootstrap_template').'</span></h5>' ); ?>
 
+            <?php if ( have_comments() ) { ?>
+                <div class="comment-lists">
+                    <ol class="comment-list list-unstyled">
+                        <?php wp_list_comments('callback=custom_list_comments'); ?>
+                    </ol>
+                    <?php
+                    // Are there comments to navigate through?
+                    if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) :
+                        ?>
+                        <footer class="navigation comment-navigation">
+                            <div class="previous"><?php previous_comments_link( esc_html__( '&larr; Older Comments', 'bootstrap_template' ) ); ?></div>
+                            <div class="next right"><?php next_comments_link( esc_html__( 'Newer Comments &rarr;', 'bootstrap_template' ) ); ?></div>
+                        </footer><!-- .comment-navigation -->
+                    <?php endif; // Check for comment navigation ?>
 
-	<?php
-	
-	comment_form();
-
-	// You can start editing here -- including this comment!
-	if ( have_comments() ) :
-		?>
-		<h2 class="comments-title mb-5">
-			<?php
-			$bootatrap_template_comment_count = get_comments_number();
-			if ( '1' === $bootatrap_template_comment_count ) {
-				printf(
-					/* translators: 1: title. */
-					esc_html__( 'One thought on &ldquo;%1$s&rdquo;', 'bootatrap_template' ),
-					'<span>' . get_the_title() . '</span>'
-				);
-			} else {
-				printf( // WPCS: XSS OK.
-					/* translators: 1: comment count number, 2: title. */
-					esc_html( _nx( '%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $bootatrap_template_comment_count, 'comments title', 'bootatrap_template' ) ),
-					number_format_i18n( $bootatrap_template_comment_count ),
-					'<span>' . get_the_title() . '</span>'
-				);
-			}
-			?> 
-		</h2><!-- .comments-title -->
-
-		<?php the_comments_navigation(); ?>
-
-		<div class="comment-list">
-			<?php
-			wp_list_comments( array(
-				'style'      => 'div',
-				'short_ping' => true,
-				'callback'   => 'mytheme_comment'
-			) );
-			?>
-		</div><!-- .comment-list -->
-
-		<?php
-		the_comments_navigation();
-
-		// If comments are closed and there are comments, let's leave a little note, shall we?
-		if ( ! comments_open() ) :
-			?>
-			<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'bootatrap_template' ); ?></p>
-			<?php
-		endif;
-
-	endif; // Check for have_comments().
-	?>
-
-</div><!-- #comments -->
+                    <?php if ( ! comments_open() && get_comments_number() ) : ?>
+                        <p class="no-comments"><?php esc_html_e( 'Comments are closed.' , 'bootstrap_template' ); ?></p>
+                    <?php endif; ?>
+                </div>
+            <?php } ?>
+        </div>
+        <?php
+        $aria_req = ( $req ? " aria-required='true'" : '' );
+        $comment_args = array(
+            'title_reply'=> '<span class="heading widgettitles">'.esc_html__('Leave a Comment','bootstrap_template').'</span>',
+            'comment_field' => '<div class="form-group">
+                                                    <textarea rows="8" id="comment" class="form-control" placeholder="'.esc_attr__('Comment*', 'bootstrap_template').'" name="comment"'.$aria_req.'></textarea>
+                                                </div>',
+            'fields' => apply_filters(
+                'comment_form_default_fields',
+                array(
+                    'author' => '<div class="row"><div class="form-group col-md-6">
+                                                <input type="text" name="author" placeholder="'.esc_attr__('Name*', 'bootstrap_template').'" class="form-control" id="author" value="' . esc_attr( $commenter['comment_author'] ) . '" ' . $aria_req . ' />
+                                                </div>',
+                    'email' => '<div class="form-group col-md-6">
+                                                <input id="email" name="email" class="form-control" placeholder="'.esc_attr__('Email*', 'bootstrap_template').'" type="text" value="' . esc_attr(  $commenter['comment_author_email'] ) . '" ' . $aria_req . ' />
+                                                </div> </div>',
+                    'url' => false,
+                )),
+            'label_submit' => 'Post Comment',
+            'comment_notes_before' => '<p class="h-info">'.__('Your email address will not be published.','bootstrap_template').'</p>',
+            'comment_notes_after' => '',
+        );
+        ?>
+        <?php if('open' == $post->comment_status){ ?>
+            <div class="commentform">
+                <?php custom_comment_form($comment_args,'btn-variant'); ?>
+            </div><!-- end commentform -->
+        <?php } ?>
+    <?php }?>
+</div><!-- end comments -->

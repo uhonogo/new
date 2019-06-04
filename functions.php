@@ -7,6 +7,13 @@
  * @package bootatrap_template
  */
 
+
+require get_template_directory() . '/lib/plagins/tgm/sock.php';
+
+// custom hooks include
+include_once( 'custom-actions.php' );
+
+
 if ( ! function_exists( 'bootatrap_template_setup' ) ) :
 	/**
 	 * Sets up theme defaults and registers support for various WordPress features.
@@ -107,12 +114,57 @@ function bootatrap_template_widgets_init() {
 	register_sidebar( array(
 		'name'          => esc_html__( 'Sidebar', 'bootatrap_template' ),
 		'id'            => 'sidebar-1',
-		'description'   => esc_html__( 'Add widgets here.', 'bootatrap_template' ),
-		'before_widget' => '<section id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</section>',
+		'description'   => esc_html__( 'Add widgets here to appear in the sidebar.', 'bootatrap_template' ),
+		'before_widget' => '<div id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</div>',
 		'before_title'  => '<h2 class="widget-title">',
 		'after_title'   => '</h2>',
-	) );
+	));
+	register_sidebar( array(
+		'name'          => esc_html__( 'Recent Post Image', 'bootatrap_template' ),
+		'id'            => 'recent-1',
+		'description'   => esc_html__( 'Add widgets here to appear in the homepage.', 'bootatrap_template' ),
+		'before_widget' => '<div id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h2 class="widget-title">',
+		'after_title'   => '</h2>',
+	));
+	register_sidebar(array(
+        'name' => esc_html__('Footer 1','bootatrap_template'),
+        'id'   => 'footer-1',
+        'description'   => esc_html__( 'Add the widget here to appear in the first Footer column.', 'bootatrap_template' ),
+        'before_widget' => '<div id="%1$s" class="widget first %2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h2 class="widget-title">',
+        'after_title' => '</h2>',
+    ));
+    register_sidebar(array(
+        'name' => esc_html__('Footer 2','bootatrap_template'),
+        'id'   => 'footer-2',
+        'description'   => esc_html__( 'Add the widget here to appear in the second Footer column.', 'bootatrap_template' ),
+        'before_widget' => '<div id="%1$s" class="widget first %2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h2 class="widget-title">',
+        'after_title' => '</h2>',
+    ));
+    register_sidebar(array(
+        'name' => esc_html__('Footer 3','bootatrap_template'),
+        'id'   => 'footer-3',
+        'description'   => esc_html__( 'Add the widget here to appear in the 3rd Footer column.', 'bootatrap_template' ),
+        'before_widget' => '<div id="%1$s" class="widget first %2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h2 class="widget-title">',
+        'after_title' => '</h2>',
+    ));
+    register_sidebar(array(
+        'name' => esc_html__('Footer 4','bootatrap_template'),
+        'id'   => 'footer-4',
+        'description'   => esc_html__( 'Add the widget here to appear in the 4rd Footer column.', 'bootatrap_template' ),
+        'before_widget' => '<div id="%1$s" class="widget first %2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h2 class="widget-title">',
+        'after_title' => '</h2>',
+    ));
 }
 add_action( 'widgets_init', 'bootatrap_template_widgets_init' );
 
@@ -186,6 +238,7 @@ add_action('wp_enqueue_scripts', 'load_bootstrap');
 
 function load_syles(){
 	wp_enqueue_style('main-css', get_template_directory_uri().'/css/style.css');
+	wp_enqueue_style('font-awesome', 'https://use.fontawesome.com/releases/v5.8.1/css/all.css');
 	wp_enqueue_style('slick-css', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css');
 	wp_enqueue_style('slick-min', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css');
 }
@@ -286,76 +339,11 @@ if ( !function_exists( 'wpex_pagination' ) ) {
 
 // custom comments template
 
-function mytheme_comment($comment, $args, $depth) {
-    if ( 'div' === $args['style'] ) {
-        $tag       = 'div';
-        $add_below = 'comment';
-    } else {
-        $tag       = 'div';
-        $add_below = 'div-comment';
-    }?>
-    <<?php echo $tag; ?> <?php comment_class( empty( $args['has_children'] ) ? '' : 'parent' ); ?> id="comment-<?php comment_ID() ?>"><?php 
-    if ( 'div' != $args['style'] ) { ?>
-        <div id="div-comment-<?php comment_ID() ?>" class="comment-body"><?php
-    } ?>
-    	<div class="comment-block mb-3">
-	        <div class="container-fluid">
-	        	<div class="row">
-					<div class="userImage">
-		        		<?php 
-			            if ( $args['avatar_size'] != 0 ) {
-			                echo get_avatar( $comment ); 
-			            } ?>
-			        </div>
-					<div class="comment-info ml-3">
-			        	<div class="autor">
-				        	<span class="date"><?php
-				                printf( 
-				                    __('%1$s at %2$s'), 
-				                    get_comment_date(),  
-				                    get_comment_time() 
-				                ); ?>
-				            </span>
-				            <?php
-				            printf( __( '<span class="fn">%s</span>:' ), get_comment_author_link() ); ?>
-				        </div>
-						<div class="comment-text">
-							<?php comment_text(); ?>
-						</div>
-		        	</div>
-		        </div>
-	        </div>
-	        <?php 
-	        if ( $comment->comment_approved == '0' ) { ?>
-	            <em class="comment-awaiting-moderation"><?php _e( 'Your comment is awaiting moderation.' ); ?></em><br/><?php 
-	        } ?>
-
-	        <div class="reply text-right">
-	        	<?php 
-	                comment_reply_link( 
-	                    array_merge( 
-	                        $args, 
-	                        array( 
-	                            'add_below' => $add_below, 
-	                            'depth'     => $depth, 
-	                            'max_depth' => $args['max_depth'] 
-	                        ) 
-	                    ) 
-	                ); ?>
-	        </div>
-	    </div>
-        <?php 
-    if ( 'div' != $args['style'] ) : ?>
-        </div>
-        <?php 
-    endif;
-}
-
 function wpb_move_comment_field_to_bottom( $fields ) {
-$comment_field = $fields['comment'];
-unset( $fields['comment'] );
-$fields['comment'] = $comment_field;
-return $fields;
+	$comment_field = $fields['comment'];
+	unset( $fields['comment'] );
+	$fields['comment'] = $comment_field;
+	return $fields;
 }
  
 add_filter( 'comment_form_fields', 'wpb_move_comment_field_to_bottom' );
